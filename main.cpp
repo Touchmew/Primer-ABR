@@ -18,6 +18,50 @@ Persona* crearPersona(string nombre, string fecha) {
     return new Persona(nombre, fecha);
 }
 // Insertar, Alvaro
+void anadirHijo() {
+    if (raiz == NULL) {
+        cout << "Primero debes crear la persona raiz.\n";
+        return;
+    }
+
+    string padreNombre;
+    cout << "Ingrese el nombre del padre/madre: ";
+    getline(cin, padreNombre);
+
+    Persona* padre = buscarPorNombre(raiz, padreNombre);
+    if (padre == NULL) {
+        cout << "Padre/madre no encontrado.\n";
+        return;
+    }
+
+    string hijoNombre, fecha;
+    cout << "Ingrese el nombre del hijo: ";
+    getline(cin, hijoNombre);
+    cout << "Ingrese la fecha de nacimiento: ";
+    getline(cin, fecha);
+
+    string direccion;
+    cout << "¿Hijo izquierdo o derecho? (i/d): ";
+    getline(cin, direccion);
+
+    if (direccion == "i") {
+        if (padre->hijoIzquierdo == NULL) {
+            padre->hijoIzquierdo = crearPersona(hijoNombre, fecha);
+            cout << "Hijo izquierdo agregado correctamente.\n";
+        } else {
+            cout << "Este padre ya tiene un hijo izquierdo.\n";
+        }
+    } else if (direccion == "d") {
+        if (padre->hijoDerecho == NULL) {
+            padre->hijoDerecho = crearPersona(hijoNombre, fecha);
+            cout << "Hijo derecho agregado correctamente.\n";
+        } else {
+            cout << "Este padre ya tiene un hijo derecho.\n";
+        }
+    } else {
+        cout << "Opcion invalida. Usa 'i' para izquierdo o 'd' para derecho.\n";
+    }
+}
 // Buscar , Almir 
 void buscarPersona() {
     if (raiz == NULL) {
