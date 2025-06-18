@@ -19,6 +19,24 @@ Persona* crearPersona(string nombre, string fecha) {
 }
 // Insertar, Alvaro
 // Buscar , Almir 
+void buscarPersona() {
+    if (raiz == NULL) {
+        cout << "El arbol esta vacio.\n";
+        return;
+    }
+
+    string nombre;
+    cout << "Nombre a buscar: ";
+    getline(cin, nombre);
+    Persona* persona = buscarPorNombre(raiz, nombre);
+
+    if (persona != NULL) {
+        cout << "Persona encontrada: " << persona->nombre
+             << ", Fecha de nacimiento: " << persona->fechaNacimiento << "\n";
+    } else {
+        cout << "No se encontro a " << nombre << ".\n";
+    }
+}
 //Eliminar, Daniel 
 
 //Main menu , jhul 
