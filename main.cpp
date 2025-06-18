@@ -82,7 +82,32 @@ void buscarPersona() {
     }
 }
 //Eliminar, Daniel 
+void Eliminar() {
+    string nombre;
+    cout << "Nombre de la persona a eliminar (y sus descendientes): ";
+    getline(cin, nombre);
+    Persona* persona = buscarPorNombre(raiz, nombre);
 
+    if (persona == NULL) {
+        cout << "Persona no encontrada.\n";
+        return;
+    }
+
+    if (persona == raiz) {
+        eliminarNodo(raiz);
+        cout << "Raíz y todos sus descendientes eliminados.\n";
+        return;
+    }
+
+    Persona* padre = persona->padre;
+    if (padre->hijoIzquierdo == persona) {
+        eliminarNodo(padre->hijoIzquierdo);
+        cout << "Subárbol izquierdo eliminado.\n";
+    } else if (padre->hijoDerecho == persona) {
+        eliminarNodo(padre->hijoDerecho);
+        cout << "Subárbol derecho eliminado.\n";
+    }
+}
 //Main menu , jhul 
 int main() {
     int opcion;
@@ -120,4 +145,4 @@ int main() {
     } while (opcion != 0);
 return 0;
 }
-//que se hace en esta cosa?
+
