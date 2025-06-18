@@ -118,4 +118,6 @@ int main() {
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
     } while (opcion != 0);
+return 0;
+}
 //que se hace en esta cosa?
