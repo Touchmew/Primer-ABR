@@ -1,21 +1,49 @@
-//hallo
 #include <iostream>
 #include <string>
+using namespace std;
 // estruct 
 
 struct Persona{
   string  nombre;
-  String fechaNacimiento;
+  string fechaNacimiento;
+  Persona* padre;
   Persona* hijoIzquierdo;
   Persona* hijoDerecho;
   Persona(string _nombre, string _fecha)
         : nombre(_nombre), fechaNacimiento(_fecha),
           padre(NULL), hijoIzquierdo(NULL), hijoDerecho(NULL) {}
 };
+//nodo global
+Persona* raiz = NULL;
 //Funcion crear persona
-
 Persona* crearPersona(string nombre, string fecha) {
     return new Persona(nombre, fecha);
+}
+//funcion para buscar recurrsiva
+Persona* buscarPorNombre(Persona* nodo, const string& nombre) {
+    if (nodo == NULL) return NULL;
+    if (nodo->nombre == nombre) return nodo;
+
+    Persona* encontrado = buscarPorNombre(nodo->hijoIzquierdo, nombre);
+    if (encontrado != NULL) return encontrado;
+
+    return buscarPorNombre(nodo->hijoDerecho, nombre);
+}
+//arbol de raiz
+void crearRaiz() {
+    if (raiz != NULL) {
+        cout << "Ya existe una raiz.\n";
+        return;
+    }
+
+    string nombre, fecha;
+    cout << "Ingrese el nombre de la persona raiz: ";
+    getline(cin, nombre);
+    cout << "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
+    getline(cin, fecha);
+
+    raiz = crearPersona(nombre, fecha);
+    cout << "Raiz creada correctamente.\n";
 }
 // Insertar, Alvaro
 void anadirHijo() {
@@ -81,6 +109,15 @@ void buscarPersona() {
         cout << "No se encontro a " << nombre << ".\n";
     }
 }
+void eliminarNodo(Persona*& nodo) {
+    if (nodo == NULL) return;
+
+    eliminarNodo(nodo->hijoIzquierdo);
+    eliminarNodo(nodo->hijoDerecho);
+
+    delete nodo;
+    nodo = NULL;
+}
 //Eliminar, Daniel 
 void Eliminar() {
     string nombre;
@@ -142,7 +179,7 @@ int main() {
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 0);
-return 0;
+    } while (opcion != 5);
+  return 0;
 }
 
