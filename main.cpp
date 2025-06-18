@@ -189,7 +189,10 @@ int main() {
         cout << "2. Anadir hijo (izquierdo o derecho)\n";
         cout << "3. Buscar persona por nombre\n";
         cout << "4. Eliminar\n";
-        cout << "5. Salir\n";
+        cout << "5. Buscar en preorden\n";
+        cout << "6. Buscar en inorden\n";
+        cout << "7. Buscar en postorden\n";
+        cout << "8. Salir\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
