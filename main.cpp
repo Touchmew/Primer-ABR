@@ -171,7 +171,7 @@ int main() {
                 buscarPersona();
                 break;
             case 4:
-                Eliminar();
+                eliminarPersona();
                 break;
           case 5:
                 cout << "Saliendo del programa.\n";
