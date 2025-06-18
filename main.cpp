@@ -119,31 +119,46 @@ void eliminarNodo(Persona*& nodo) {
     nodo = NULL;
 }
 //Eliminar, Daniel 
-void Eliminar() {
+void eliminarPersona() {
+    if (raiz == NULL) {
+        cout << "El arbol esta vacio.\n";
+        return;
+    }
+
     string nombre;
-    cout << "Nombre de la persona a eliminar (y sus descendientes): ";
+    cout << "Nombre de la persona a eliminar: ";
     getline(cin, nombre);
     Persona* persona = buscarPorNombre(raiz, nombre);
 
     if (persona == NULL) {
-        cout << "Persona no encontrada.\n";
+        cout << "No se encontro a " << nombre << ".\n";
         return;
     }
 
+    // No se permite eliminar si tiene hijos
+    if (persona->hijoIzquierdo != NULL || persona->hijoDerecho != NULL) {
+        cout << "No se puede eliminar a " << nombre << " porque tiene hijos.\n";
+        return;
+    }
+
+    // Si es la raiz
     if (persona == raiz) {
-        eliminarNodo(raiz);
-        cout << "Raíz y todos sus descendientes eliminados.\n";
+        delete raiz;
+        raiz = NULL;
+        cout << "Raiz eliminada correctamente.\n";
         return;
     }
 
+    // Eliminar desde el padre
     Persona* padre = persona->padre;
     if (padre->hijoIzquierdo == persona) {
-        eliminarNodo(padre->hijoIzquierdo);
-        cout << "Subárbol izquierdo eliminado.\n";
+        padre->hijoIzquierdo = NULL;
     } else if (padre->hijoDerecho == persona) {
-        eliminarNodo(padre->hijoDerecho);
-        cout << "Subárbol derecho eliminado.\n";
+        padre->hijoDerecho = NULL;
     }
+
+    delete persona;
+    cout << "Persona eliminada correctamente.\n";
 }
 //Main menu , jhul 
 int main() {
