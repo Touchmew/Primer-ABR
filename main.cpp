@@ -154,6 +154,31 @@ void eliminarPersona() {
     delete persona;
     cout << "Persona eliminada correctamente.\n";
 }
+// Funcion de busqueda preorden
+void buscarPreorden(Persona* nodo) {
+    if (nodo == NULL) return;
+    cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+    buscarPreorden(nodo->hijoIzquierdo);
+    buscarPreorden(nodo->hijoDerecho);
+}
+
+// Función de búsqueda en inorden
+void buscarInorden(Persona* nodo) {
+    if (nodo == NULL) return;
+    buscarInorden(nodo->hijoIzquierdo);
+    cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+    buscarInorden(nodo->hijoDerecho);
+}
+
+// Función de búsqueda en postorden
+void buscarPostorden(Persona* nodo) {
+    if (nodo == NULL) return;
+    buscarPostorden(nodo->hijoIzquierdo);
+    buscarPostorden(nodo->hijoDerecho);
+    cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+}
+
+
 //Main menu , jhul 
 int main() {
     int opcion;
@@ -182,13 +207,26 @@ int main() {
             case 4:
                 eliminarPersona();
                 break;
-          case 5:
+            case 5:
+                cout << "Búsqueda en Preorden:\n";
+                buscarPreorden(raiz);
+                break;
+            case 6:
+                cout << "Búsqueda en Inorden:\n";
+                buscarInorden(raiz);
+                break;
+            case 7:
+                cout << "Búsqueda en Postorden:\n";
+                buscarPostorden(raiz);
+                break;
+            case 8:
                 cout << "Saliendo del programa.\n";
                 break;
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 5);
-  return 0;
+    } while (opcion != 8);
+    
+    return 0; 
 }
 
