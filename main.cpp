@@ -75,6 +75,7 @@ void anadirHijo() {
     if (direccion == "i") {
         if (padre->hijoIzquierdo == NULL) {
             padre->hijoIzquierdo = crearPersona(hijoNombre, fecha);
+            padre->hijoIzquierdo->padre = padre;
             cout << "Hijo izquierdo agregado correctamente.\n";
         } else {
             cout << "Este padre ya tiene un hijo izquierdo.\n";
@@ -82,6 +83,7 @@ void anadirHijo() {
     } else if (direccion == "d") {
         if (padre->hijoDerecho == NULL) {
             padre->hijoDerecho = crearPersona(hijoNombre, fecha);
+            padre->hijoDerecho->padre = padre;
             cout << "Hijo derecho agregado correctamente.\n";
         } else {
             cout << "Este padre ya tiene un hijo derecho.\n";
