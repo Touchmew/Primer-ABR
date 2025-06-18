@@ -109,15 +109,7 @@ void buscarPersona() {
         cout << "No se encontro a " << nombre << ".\n";
     }
 }
-void eliminarNodo(Persona*& nodo) {
-    if (nodo == NULL) return;
 
-    eliminarNodo(nodo->hijoIzquierdo);
-    eliminarNodo(nodo->hijoDerecho);
-
-    delete nodo;
-    nodo = NULL;
-}
 //Eliminar, Daniel 
 void eliminarPersona() {
     if (raiz == NULL) {
