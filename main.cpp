@@ -360,6 +360,39 @@ void consultarRelacion() {
         cout << A->nombre << " y " << B->nombre << " no tienen relación directa.\n";  // Informa sin relación
     }
 }
+// Submenú de consultas genealógicas
+int submenuConsultas() {
+    int opcion;
+    do {
+        cout << "\n--- SUBMENÚ DE CONSULTAS ---\n";
+        cout << "1. Ver ancestros\n";
+        cout << "2. Ver descendientes\n";
+        cout << "3. Ver relación entre dos personas\n";
+        cout << "4. Volver\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1:
+                mostrarAncestros();
+                break;
+            case 2:
+                mostrarDescendientes();
+                break;
+            case 3:
+                consultarRelacion();
+                break;
+            case 4:
+                cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (opcion != 4);
+    return opcion;
+}
+
 
 //Main menu , jhul 
 int main() {
