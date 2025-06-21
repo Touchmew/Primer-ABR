@@ -227,6 +227,78 @@ void buscarPostorden(Persona* nodo) {
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
 }
 
+// Función auxiliar recursiva que lista todos los descendientes de una persona.
+// Parámetros:
+// - persona: el nodo actual que se está evaluando
+// - nivel: qué tan lejano es el descendiente (1 = hijo, 2 = nieto, etc.)
+// - contador: variable que acumula el número total de descendientes encontrados
+void listarDescendientes(Persona* persona, int nivel, int& contador) {
+    // Si el nodo está vacío, salimos
+    if (persona == NULL) return;
+
+    // Determinar el tipo de relación en función del nivel
+    string relacion;
+    switch (nivel) {
+        case 1: relacion = "Hijo/a"; break;
+        case 2: relacion = "Nieto/a"; break;
+        case 3: relacion = "Bisnieto/a"; break;
+        default:
+            // Para niveles mayores, se usa "-Nieto/a", "--Nieto/a", etc.
+            relacion = string(nivel - 2, '-') + "Nieto/a";
+            break;
+    }
+
+    // Mostrar el nombre de la persona y su relación
+    cout << "- " << persona->nombre << " (" << relacion << ")\n";
+
+    // Incrementar el contador de descendientes
+    contador++;
+
+    // Llamar recursivamente por el hijo izquierdo (si existe)
+    listarDescendientes(persona->hijoIzquierdo, nivel + 1, contador);
+
+    // Llamar recursivamente por el hijo derecho (si existe)
+    listarDescendientes(persona->hijoDerecho, nivel + 1, contador);
+}
+
+// Función principal que permite al usuario ingresar un nombre
+// y ver todos los descendientes de esa persona
+void mostrarDescendientes() {
+    // Verificamos si el árbol está vacío
+    if (raiz == NULL) {
+        cout << "El árbol está vacío.\n";
+        return;
+    }
+
+    // Solicitar el nombre de la persona al usuario
+    string nombre;
+    cout << "Ingrese el nombre de la persona para ver sus descendientes: ";
+    getline(cin, nombre);
+
+    // Buscar la persona en el árbol
+    Persona* persona = buscarPorNombre(raiz, nombre);
+
+    // Si no se encuentra, informar al usuario
+    if (persona == NULL) {
+        cout << "Persona no encontrada.\n";
+        return;
+    }
+
+    // Inicializamos el contador de descendientes
+    int contador = 0;
+
+    // Iniciamos la búsqueda de descendientes desde los hijos de esta persona
+    listarDescendientes(persona->hijoIzquierdo, 1, contador);
+    listarDescendientes(persona->hijoDerecho, 1, contador);
+
+    // Mostrar resultado final
+    if (contador == 0) {
+        cout << persona->nombre << " no tiene descendientes.\n";
+    } else {
+        cout << persona->nombre << " tiene " << contador << " descendiente(s).\n";
+    }
+}
+
 
 //Main menu , jhul 
 int main() {
@@ -242,7 +314,8 @@ int main() {
         cout << "6. Buscar en inorden\n";
         cout << "7. Buscar en postorden\n";
         cout << "8. Eliminar familia completa (rama descendiente)\n";
-        cout << "9. Salir\n"; 
+        cout << "9. Mostrar descendientes de una persona\n";
+        cout << "10. Salir\n"; 
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
@@ -275,13 +348,16 @@ int main() {
             case 8:
                 eliminarFamilia();
                 break;
-            case 9:
+           case 9:
+                strarDescendientes();
+    			      break;
+            case 10:
                 cout << "Saliendo del programa.\n";
                 break;
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 9);
+    } while (opcion != 10);
     
     return 0; 
 }
