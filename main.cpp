@@ -393,6 +393,34 @@ int submenuConsultas() {
     return opcion;
 }
 
+// Submenú de eliminación
+int submenuEliminar() {
+    int opcion;
+    do {
+        cout << "\n--- SUBMENÚ DE ELIMINACIÓN ---\n";
+        cout << "1. Eliminar persona (si no tiene hijos)\n";
+        cout << "2. Eliminar familia completa (rama descendiente)\n";
+        cout << "3. Volver\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1:
+                eliminarPersona();
+                break;
+            case 2:
+                eliminarFamilia();
+                break;
+            case 3:
+                cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (opcion != 3);
+    return opcion;
+}
 
 //Main menu , jhul 
 int main() {
