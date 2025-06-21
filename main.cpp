@@ -49,47 +49,52 @@ void crearRaiz() {
 void anadirHijo() {
     if (raiz == NULL) {
         cout << "Primero debes crear la persona raiz.\n";
-        return;
-    }
-
-    string padreNombre;
-    cout << "Ingrese el nombre del padre/madre: ";
-    getline(cin, padreNombre);
-
-    Persona* padre = buscarPorNombre(raiz, padreNombre);
-    if (padre == NULL) {
-        cout << "Padre/madre no encontrado.\n";
-        return;
-    }
-
-    string hijoNombre, fecha;
-    cout << "Ingrese el nombre del hijo: ";
-    getline(cin, hijoNombre);
-    cout << "Ingrese la fecha de nacimiento: ";
-    getline(cin, fecha);
-
-    string direccion;
-    cout << "¿Hijo izquierdo o derecho? (i/d): ";
-    getline(cin, direccion);
-
-    if (direccion == "i") {
-        if (padre->hijoIzquierdo == NULL) {
-            padre->hijoIzquierdo = crearPersona(hijoNombre, fecha);
-            padre->hijoIzquierdo->padre = padre;
-            cout << "Hijo izquierdo agregado correctamente.\n";
-        } else {
-            cout << "Este padre ya tiene un hijo izquierdo.\n";
-        }
-    } else if (direccion == "d") {
-        if (padre->hijoDerecho == NULL) {
-            padre->hijoDerecho = crearPersona(hijoNombre, fecha);
-            padre->hijoDerecho->padre = padre;
-            cout << "Hijo derecho agregado correctamente.\n";
-        } else {
-            cout << "Este padre ya tiene un hijo derecho.\n";
-        }
     } else {
-        cout << "Opcion invalida. Usa 'i' para izquierdo o 'd' para derecho.\n";
+        string padreNombre;
+        cout << "Ingrese el nombre del padre/madre: ";
+        getline(cin, padreNombre);
+
+        Persona* padre = buscarPorNombre(raiz, padreNombre);
+        if (padre == NULL) {
+            cout << "Padre/madre no encontrado.\n";
+        } else {
+            // Validar que la fecha de nacimiento del padre sea válida
+            if (padre->fechaNacimiento.length() < 10 || padre->fechaNacimiento[4] != '-' || padre->fechaNacimiento[7] != '-') {
+                cout << "La fecha de nacimiento del padre es invalida. Debe ser en formato YYYY-MM-DD.\n";
+            } else {
+                string hijoNombre, fecha;
+                cout << "Ingrese el nombre del hijo: ";
+                getline(cin, hijoNombre);
+                cout << "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
+                getline(cin, fecha);
+
+                // Validación del formato de la fecha del hijo
+                if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') {
+                    cout << "Formato de fecha invalido. Use YYYY-MM-DD.\n";
+                } else {
+                    // Comparar los años de nacimiento directamente
+                    if (fecha < padre->fechaNacimiento) {
+                        if (padre->hijoIzquierdo == NULL) {
+                            padre->hijoIzquierdo = crearPersona(hijoNombre, fecha);
+                            padre->hijoIzquierdo->padre = padre;
+                            cout << "Hijo izquierdo agregado correctamente.\n";
+                        } else {
+                            cout << "Este padre ya tiene un hijo izquierdo.\n";
+                        }
+                    } else if (fecha > padre->fechaNacimiento) {
+                        if (padre->hijoDerecho == NULL) {
+                            padre->hijoDerecho = crearPersona(hijoNombre, fecha);
+                            padre->hijoDerecho->padre = padre;
+                            cout << "Hijo derecho agregado correctamente.\n";
+                        } else {
+                            cout << "Este padre ya tiene un hijo derecho.\n";
+                        }
+                    } else {
+                        cout << "La fecha de nacimiento no puede ser la misma.\n";
+                    }
+                }
+            }
+        }
     }
 }
 // Buscar , Almir 
