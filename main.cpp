@@ -339,7 +339,27 @@ bool esAncestro(Persona* posibleAncestro, Persona* persona) {
     }
     return false;     // Si no lo encuentra en la cadena de padres, retorna false
 }
+// Compara dos personas para ver si una es ancestro de la otra
+void consultarRelacion() {
+    string nombreA, nombreB;    // Nombres de las personas a consultar
+    cout << "Ingrese el nombre de la primera persona: "; getline(cin, nombreA);   // Solicita y lee el primer nombre
+    cout << "Ingrese el nombre de la segunda persona: "; getline(cin, nombreB);   // Solicita y lee el segundo nombre
 
+    Persona* A = buscarPorNombre(raiz, nombreA);   // Busca la persona A en el árbol
+    Persona* B = buscarPorNombre(raiz, nombreB);   // Busca la persona B en el árbol
+
+    if (A == NULL || B == NULL) {                  // Si alguna de las personas no fue encontrada
+        cout << "Una o ambas personas no se encuentran.\n"; return;               // Muestra mensaje y termina
+    }
+
+    if (esAncestro(A, B)) {                        // Verifica si A es ancestro de B
+        cout << A->nombre << " es ancestro de " << B->nombre << ".\n";           // Muestra resultado
+    } else if (esAncestro(B, A)) {                 // Verifica si B es ancestro de A
+        cout << B->nombre << " es ancestro de " << A->nombre << ".\n";           // Muestra resultado
+    } else {                                       // Si no hay relación directa
+        cout << A->nombre << " y " << B->nombre << " no tienen relación directa.\n";  // Informa sin relación
+    }
+}
 
 //Main menu , jhul 
 int main() {
