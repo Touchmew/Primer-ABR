@@ -154,6 +154,14 @@ void eliminarPersona() {
     delete persona;
     cout << "Persona eliminada correctamente.\n";
 }
+// Elimina recursivamente todos los descendientes de un nodo (subárbol)
+void eliminarSubarbol(Persona* nodo) {
+    if (nodo == NULL) return;
+
+    eliminarSubarbol(nodo->hijoIzquierdo);
+    eliminarSubarbol(nodo->hijoDerecho);
+    delete nodo;
+}
 //Elimina a una persona y todos sus descendientes
 void eliminarFamilia() {
     if (raiz == NULL) {
