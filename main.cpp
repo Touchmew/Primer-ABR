@@ -349,7 +349,7 @@ int main() {
                 eliminarFamilia();
                 break;
            case 9:
-                strarDescendientes();
+                mostrarDescendientes();
     			      break;
             case 10:
                 cout << "Saliendo del programa.\n";
