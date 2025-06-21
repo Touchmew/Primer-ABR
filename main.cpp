@@ -227,6 +227,37 @@ void buscarPostorden(Persona* nodo) {
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
 }
 
+// Función que muestra los ancestros
+void mostrarAncestros() {
+    if (raiz == NULL) {
+        cout << "El arbol esta vacio.\n";
+        return;
+    }
+
+    string nombre;
+    cout << "Ingrese el nombre de la persona: ";
+    getline(cin, nombre);
+
+    // Buscar la persona en el árbol
+    Persona* persona = buscarPorNombre(raiz, nombre);
+    if (persona == NULL) {
+        cout << "No se encontro a " << nombre << ".\n";
+        return;
+    }
+
+    // Mostrar ancestros desde la persona hacia la raíz
+    cout << "\nAncestros de " << persona->nombre << ":\n";
+    Persona* actual = persona->padre;
+    if (actual == NULL) {
+        cout << "No tiene ancestros (es la raiz).\n";
+        return;
+    }
+
+    while (actual != NULL) {
+        cout << actual->nombre << " (" << actual->fechaNacimiento << ")\n";
+        actual = actual->padre;
+    }
+}
 // Función auxiliar recursiva que lista todos los descendientes de una persona.
 // Parámetros:
 // - persona: el nodo actual que se está evaluando
@@ -315,7 +346,8 @@ int main() {
         cout << "7. Buscar en postorden\n";
         cout << "8. Eliminar familia completa (rama descendiente)\n";
         cout << "9. Mostrar descendientes de una persona\n";
-        cout << "10. Salir\n"; 
+        cout << "10. Mostrar ancestros de una persona\n";
+        cout << "11. Salir\n"; 
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
@@ -352,12 +384,15 @@ int main() {
                 mostrarDescendientes();
     			      break;
             case 10:
-                cout << "Saliendo del programa.\n";
+                mostrarAncestros();
                 break;
+            case 11:
+            cout << "Saliendo del programa.\n";
+            break;
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 10);
+    } while (opcion != 11);
     
     return 0; 
 }
