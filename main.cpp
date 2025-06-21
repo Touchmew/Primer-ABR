@@ -154,6 +154,41 @@ void eliminarPersona() {
     delete persona;
     cout << "Persona eliminada correctamente.\n";
 }
+//Elimina a una persona y todos sus descendientes
+void eliminarFamilia() {
+    if (raiz == NULL) {
+        cout << "El arbol esta vacio.\n";
+        return;
+    }
+
+    string nombre;
+    cout << "Nombre de la persona cuya familia desea eliminar: ";
+    getline(cin, nombre);
+    Persona* persona = buscarPorNombre(raiz, nombre);
+
+    if (persona == NULL) {
+        cout << "No se encontro a " << nombre << ".\n";
+        return;
+    }
+
+    if (persona == raiz) {
+        eliminarSubarbol(raiz);
+        raiz = NULL;
+        cout << "Toda la familia (árbol completo) fue eliminada.\n";
+        return;
+    }
+
+    Persona* padre = persona->padre;
+    if (padre->hijoIzquierdo == persona) {
+        padre->hijoIzquierdo = NULL;
+    } else if (padre->hijoDerecho == persona) {
+        padre->hijoDerecho = NULL;
+    }
+
+    eliminarSubarbol(persona);
+    cout << "Familia descendiente de " << nombre << " eliminada correctamente.\n";
+}
+
 // Funcion de busqueda preorden
 void buscarPreorden(Persona* nodo) {
     if (nodo == NULL) return;
@@ -188,11 +223,12 @@ int main() {
         cout << "1. Crear persona raiz\n";
         cout << "2. Anadir hijo (izquierdo o derecho)\n";
         cout << "3. Buscar persona por nombre\n";
-        cout << "4. Eliminar\n";
+        cout << "4. Eliminar persona (solo si no tiene hijos)\n";
         cout << "5. Buscar en preorden\n";
         cout << "6. Buscar en inorden\n";
         cout << "7. Buscar en postorden\n";
-        cout << "8. Salir\n";
+        cout << "8. Eliminar familia completa (rama descendiente)\n";
+        cout << "9. Salir\n"; 
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
@@ -223,12 +259,15 @@ int main() {
                 buscarPostorden(raiz);
                 break;
             case 8:
+                eliminarFamilia();
+                break;
+            case 9:
                 cout << "Saliendo del programa.\n";
                 break;
             default:
                 cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 8);
+    } while (opcion != 9);
     
     return 0; 
 }
