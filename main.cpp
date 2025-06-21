@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <iomanip> // Para std::setw
+#include <clocale> // nesesario para el uso del setlocale
 using namespace std;
 // estruct 
-
 struct Persona{
   string  nombre;
   string fechaNacimiento;
@@ -426,11 +426,22 @@ int submenuEliminar() {
     return opcion;
 }
 
-//Main menu , jhul 
+// Función para mostrar el árbol
+void mostrarArbol(Persona* nodo, int espacio = 0, int nivel = 0) {
+    if (nodo == NULL) return;
+    espacio += 10; // Aumentar el espacio para cada nivel
+    // Mostrar hijo derecho primero
+    mostrarArbol(nodo->hijoDerecho, espacio, nivel + 1);
+    // Mostrar el nodo actual
+    cout << endl;
+    cout << setw(espacio) << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+    // Mostrar hijo izquierdo
+    mostrarArbol(nodo->hijoIzquierdo, espacio, nivel + 1);
+}
+//Main menu ,  
 int main() {
-  	setlocale(LC_CYTPE, "Spanish");
-    int opcion;
-
+	setlocale(LC_CTYPE, "Spanish");    
+  int opcion;
     do {
         cout << "\n--- MENU ARBOL BINARIO GENEALOGICO ---\n";
         cout << "1. Crear persona raiz\n";
@@ -439,7 +450,8 @@ int main() {
         cout << "4. Eliminar (persona o familia)\n";
         cout << "5. Recorridos (Preorden, Inorden, Postorden)\n";
         cout << "6. Consultas (ancestros, descendientes, relaciones)\n";
-        cout << "7. Salir\n";
+        cout << "7. Mostrar Arbol\n";
+        cout << "8. Salir\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
@@ -450,12 +462,10 @@ int main() {
             case 4: submenuEliminar(); break;
             case 5: submenuRecorridos(); break;
             case 6: submenuConsultas(); break;
-            case 7: cout << "Saliendo del programa.\n"; break;
+            case 7: mostrarArbol(raiz); break;
+            case 8: cout << "Saliendo del programa.\n"; break;
             default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
     } while (opcion != 7);
-
-    
     return 0; 
 }
-
