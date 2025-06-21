@@ -329,6 +329,16 @@ void mostrarDescendientes() {
         cout << persona->nombre << " tiene " << contador << " descendiente(s).\n";
     }
 }
+// Función que verifica si 'posibleAncestro' es ancestro de 'persona'
+bool esAncestro(Persona* posibleAncestro, Persona* persona) { 
+    Persona* actual = persona->padre;   // Comienza desde el padre de la persona actual
+    while (actual != NULL) {   // Recorre la línea de ascendencia mientras haya padres
+        if (actual == posibleAncestro)       // Si encuentra al posible ancestro, retorna true
+            return true;
+        actual = actual->padre;    // Avanza al siguiente ancestro (padre del padre)
+    }
+    return false;     // Si no lo encuentra en la cadena de padres, retorna false
+}
 
 
 //Main menu , jhul 
