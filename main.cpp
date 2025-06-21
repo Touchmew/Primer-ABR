@@ -47,13 +47,14 @@ void crearRaiz() {
 }
 // Insertar, Alvaro
 void anadirHijo() {
+  // Verifica si la raíz del árbol existe
     if (raiz == NULL) {
         cout << "Primero debes crear la persona raiz.\n";
     } else {
         string padreNombre;
         cout << "Ingrese el nombre del padre/madre: ";
         getline(cin, padreNombre);
-
+        // Busca al padre en el árbol
         Persona* padre = buscarPorNombre(raiz, padreNombre);
         if (padre == NULL) {
             cout << "Padre/madre no encontrado.\n";
@@ -79,7 +80,7 @@ void anadirHijo() {
                             padre->hijoIzquierdo->padre = padre;
                             cout << "Hijo izquierdo agregado correctamente.\n";
                         } else {
-                            cout << "Este padre ya tiene un hijo izquierdo.\n";
+                            cout << "Este padre ya tiene un hijo izquierdo.\n"; // Mensaje si ya se tiene uno a la izquierda
                         }
                     } else if (fecha > padre->fechaNacimiento) {
                         if (padre->hijoDerecho == NULL) {
@@ -87,10 +88,10 @@ void anadirHijo() {
                             padre->hijoDerecho->padre = padre;
                             cout << "Hijo derecho agregado correctamente.\n";
                         } else {
-                            cout << "Este padre ya tiene un hijo derecho.\n";
+                            cout << "Este padre ya tiene un hijo derecho.\n"; // Mensaje si ya se tiene uno a la derecha
                         }
                     } else {
-                        cout << "La fecha de nacimiento no puede ser la misma.\n";
+                        cout << "La fecha de nacimiento no puede ser la misma.\n";// Mensaje si las fechas son iguales
                     }
                 }
             }
