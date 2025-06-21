@@ -466,6 +466,6 @@ int main() {
             case 8: cout << "Saliendo del programa.\n"; break;
             default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 7);
+    } while (opcion != 8);
     return 0; 
 }
