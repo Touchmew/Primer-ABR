@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <iomanip> // Para std::setw
 using namespace std;
 // estruct 
 
@@ -278,13 +279,10 @@ void listarDescendientes(Persona* persona, int nivel, int& contador) {
             relacion = string(nivel - 2, '-') + "Nieto/a";
             break;
     }
-
     // Mostrar el nombre de la persona y su relación
     cout << "- " << persona->nombre << " (" << relacion << ")\n";
-
     // Incrementar el contador de descendientes
     contador++;
-
     // Llamar recursivamente por el hijo izquierdo (si existe)
     listarDescendientes(persona->hijoIzquierdo, nivel + 1, contador);
 
@@ -300,7 +298,6 @@ void mostrarDescendientes() {
         cout << "El árbol está vacío.\n";
         return;
     }
-
     // Solicitar el nombre de la persona al usuario
     string nombre;
     cout << "Ingrese el nombre de la persona para ver sus descendientes: ";
@@ -360,6 +357,30 @@ void consultarRelacion() {
         cout << A->nombre << " y " << B->nombre << " no tienen relación directa.\n";  // Informa sin relación
     }
 }
+// Submenú de recorridos
+int submenuRecorridos() {
+    int opcion;
+    do {
+        cout << "\n--- SUBMENÚ DE RECORRIDOS ---\n";
+        cout << "1. Preorden\n";
+        cout << "2. Inorden\n";
+        cout << "3. Postorden\n";
+        cout << "4. Volver\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: cout << "\nRecorrido Preorden:\n"; buscarPreorden(raiz); break;
+            case 2: cout << "\nRecorrido Inorden:\n"; buscarInorden(raiz); break;
+            case 3: cout << "\nRecorrido Postorden:\n"; buscarPostorden(raiz); break;
+            case 4: cout << "Volviendo al menú principal...\n"; break;
+            default: cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (opcion != 4);
+    return opcion;
+}
+
 // Submenú de consultas genealógicas
 int submenuConsultas() {
     int opcion;
@@ -374,20 +395,11 @@ int submenuConsultas() {
         cin.ignore();
 
         switch (opcion) {
-            case 1:
-                mostrarAncestros();
-                break;
-            case 2:
-                mostrarDescendientes();
-                break;
-            case 3:
-                consultarRelacion();
-                break;
-            case 4:
-                cout << "Volviendo al menú principal...\n";
-                break;
-            default:
-                cout << "Opción inválida. Intente de nuevo.\n";
+            case 1: mostrarAncestros(); break;
+            case 2: mostrarDescendientes(); break;
+            case 3: consultarRelacion(); break;
+            case 4: cout << "Volviendo al menú principal...\n"; break;
+            default: cout << "Opción inválida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
     return opcion;
@@ -404,19 +416,11 @@ int submenuEliminar() {
         cout << "Seleccione una opción: ";
         cin >> opcion;
         cin.ignore();
-
         switch (opcion) {
-            case 1:
-                eliminarPersona();
-                break;
-            case 2:
-                eliminarFamilia();
-                break;
-            case 3:
-                cout << "Volviendo al menú principal...\n";
-                break;
-            default:
-                cout << "Opción inválida. Intente de nuevo.\n";
+            case 1: eliminarPersona(); break;
+            case 2: eliminarFamilia(); break;
+            case 3: cout << "Volviendo al menú principal...\n"; break;
+            default: cout << "Opción inválida. Intente de nuevo.\n";
         }
     } while (opcion != 3);
     return opcion;
@@ -424,6 +428,7 @@ int submenuEliminar() {
 
 //Main menu , jhul 
 int main() {
+  	setlocale(LC_CYTPE, "Spanish");
     int opcion;
 
     do {
@@ -431,59 +436,25 @@ int main() {
         cout << "1. Crear persona raiz\n";
         cout << "2. Anadir hijo (izquierdo o derecho)\n";
         cout << "3. Buscar persona por nombre\n";
-        cout << "4. Eliminar persona (solo si no tiene hijos)\n";
-        cout << "5. Buscar en preorden\n";
-        cout << "6. Buscar en inorden\n";
-        cout << "7. Buscar en postorden\n";
-        cout << "8. Eliminar familia completa (rama descendiente)\n";
-        cout << "9. Mostrar descendientes de una persona\n";
-        cout << "10. Mostrar ancestros de una persona\n";
-        cout << "11. Salir\n"; 
+        cout << "4. Eliminar (persona o familia)\n";
+        cout << "5. Recorridos (Preorden, Inorden, Postorden)\n";
+        cout << "6. Consultas (ancestros, descendientes, relaciones)\n";
+        cout << "7. Salir\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
-
         switch (opcion) {
-            case 1:
-                crearRaiz();
-                break;
-            case 2:
-                anadirHijo();
-                break;
-            case 3:
-                buscarPersona();
-                break;
-            case 4:
-                eliminarPersona();
-                break;
-            case 5:
-                cout << "Búsqueda en Preorden:\n";
-                buscarPreorden(raiz);
-                break;
-            case 6:
-                cout << "Búsqueda en Inorden:\n";
-                buscarInorden(raiz);
-                break;
-            case 7:
-                cout << "Búsqueda en Postorden:\n";
-                buscarPostorden(raiz);
-                break;
-            case 8:
-                eliminarFamilia();
-                break;
-           case 9:
-                mostrarDescendientes();
-    			      break;
-            case 10:
-                mostrarAncestros();
-                break;
-            case 11:
-            cout << "Saliendo del programa.\n";
-            break;
-            default:
-                cout << "Opcion invalida. Intente de nuevo.\n";
+            case 1: crearRaiz(); break;
+            case 2: anadirHijo(); break;
+            case 3: buscarPersona(); break;
+            case 4: submenuEliminar(); break;
+            case 5: submenuRecorridos(); break;
+            case 6: submenuConsultas(); break;
+            case 7: cout << "Saliendo del programa.\n"; break;
+            default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 11);
+    } while (opcion != 7);
+
     
     return 0; 
 }
