@@ -30,54 +30,54 @@ Persona* buscarPorNombre(Persona* nodo, const string& nombre) {
 
     return buscarPorNombre(nodo->hijoDerecho, nombre);
 }
-
-// Insertar, 
 void insertarPersona() {
     string nombre, fecha;
-    cout << "Ingrese el nombre: ";
+    cout << "Ingrese el nombre: ";    // Se solicita al usuario el nombre y la fecha de nacimiento
     getline(cin, nombre);
     cout << "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
     getline(cin, fecha);
 
-    if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') {
-        cout << "Formato de fecha inválido. Use YYYY-MM-DD.\n";
-        return;
+    if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') { // Se valida que la fecha tenga el formato correcto (YYYY-MM-DD)
+        cout << "Formato de fecha inv�lido. Use YYYY-MM-DD.\n";
+        return; // Sale de la funci�n si el formato no es v�lido
     }
-    Persona* nueva = new Persona(nombre, fecha);    // Insertar la persona automáticamente en el árbol como ABB
+    Persona* nueva = new Persona(nombre, fecha); // Se crea una nueva persona con los datos ingresados
+    // Si el �rbol est� vac�o, se asigna la nueva persona como ra�z
     if (raiz == NULL) {
         raiz = nueva;
-        cout << "Persona raíz creada correctamente.\n";
+        cout << "Persona ra�z creada correctamente.\n";
         return;
     }
-
-    Persona* actual = raiz;
+    Persona* actual = raiz; // Se busca la posici�n adecuada en el �rbol
     Persona* padre = NULL;
 
     while (actual != NULL) {
         padre = actual;
-        if (fecha < actual->fechaNacimiento) {
+        if (fecha < actual->fechaNacimiento) { // Si la fecha es menor, se va al hijo izquierdo
             actual = actual->hijoIzquierdo;
-        } else if (fecha > actual->fechaNacimiento) {
+        }
+        else if (fecha > actual->fechaNacimiento) {  // Si es mayor, se va al hijo derecho
             actual = actual->hijoDerecho;
-        } else {
+        }
+        else { // Si ya existe una persona con la misma fecha, se cancela la inserci�n
             cout << "Ya existe una persona con esa fecha de nacimiento.\n";
             delete nueva;
             return;
         }
     }
     nueva->padre = padre;
-	
-    if (fecha < padre->fechaNacimiento) {
+    if (fecha < padre->fechaNacimiento) {    // Se enlaza la nueva persona al padre correspondiente
         padre->hijoIzquierdo = nueva;
     } else {
         padre->hijoDerecho = nueva;
     }
-    cout << "Persona insertada correctamente como "
+
+    cout << "Persona insertada correctamente como "    // Mensaje de confirmaci�n de inserci�n
          << ((fecha < padre->fechaNacimiento) ? "hijo izquierdo" : "hijo derecho")
          << " de " << padre->nombre << ".\n";
 }
 
-// Buscar   
+// Buscar ,  
 void buscarPersona() {
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
@@ -97,7 +97,7 @@ void buscarPersona() {
     }
 }
 
-//Eliminar, Daniel 
+//Eliminar,   
 void eliminarPersona() {
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
@@ -206,66 +206,97 @@ void buscarPostorden(Persona* nodo) {
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
 }
 
-// Recorre el árbol y muestra a todas las personas que nacieron después que la persona indicada
-void buscarDescendientesPorFecha(Persona* nodo, const string& refFecha, int& contador) {
-    if (nodo == NULL) return;  // Caso base: si el nodo es nulo, no hay nada que procesar
+// Recorre el �rbol y muestra a todas las personas que nacieron antes que la persona indicada
+void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha) {
+    if (nodo == NULL) return;
 
-    // Recorrido en orden: primero el subárbol izquierdo
-    buscarDescendientesPorFecha(nodo->hijoIzquierdo, refFecha, contador);
+    buscarAncestrosPorFecha(nodo->hijoIzquierdo, refFecha);
 
-    // Si la fecha de nacimiento del nodo actual es posterior a la fecha de referencia, se muestra
-    if (nodo->fechaNacimiento > refFecha) {
+    if (nodo->fechaNacimiento < refFecha) {
         cout << "- " << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
-        contador++;  // Se incrementa el contador de personas encontradas
     }
 
-    // Luego se recorre el subárbol derecho
-    buscarDescendientesPorFecha(nodo->hijoDerecho, refFecha, contador);
+    buscarAncestrosPorFecha(nodo->hijoDerecho, refFecha);
 }
 
-// Función que solicita un nombre al usuario y muestra personas nacidas después que esa persona
-void mostrarDescendientes() {
+// Recorre el �rbol y muestra a todas las personas que nacieron antes que la persona indicada
+void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha, int& contador) {
+    if (nodo == NULL) return;
+
+    buscarAncestrosPorFecha(nodo->hijoIzquierdo, refFecha, contador);
+
+    if (nodo->fechaNacimiento < refFecha) {
+        cout << "- " << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+        contador++;
+    }
+
+    buscarAncestrosPorFecha(nodo->hijoDerecho, refFecha, contador);
+}
+
+void mostrarAncestros() {
     if (raiz == NULL) {
-        // Si el árbol está vacío, se informa y se termina la función
-        cout << "El árbol está vacío.\n";
+        cout << "El �rbol est� vac�o.\n";
         return;
     }
 
     string nombre;
     cout << "Ingrese el nombre de la persona: ";
-    getline(cin, nombre);  // Se obtiene el nombre de la persona desde la entrada estándar
+    getline(cin, nombre);
 
-    // Se busca la persona por nombre en el árbol
     Persona* ref = buscarPorNombre(raiz, nombre);
     if (ref == NULL) {
-        // Si la persona no fue encontrada, se informa y se termina la función
         cout << "Persona no encontrada.\n";
         return;
     }
 
-    // Si se encuentra la persona, se busca y muestran las personas nacidas después
+    cout << "\nAncestros de " << ref->nombre << " (por fecha):\n";
+    int contador = 0;
+    buscarAncestrosPorFecha(raiz, ref->fechaNacimiento, contador);
+
+    if (contador == 0) {
+        cout << ref->nombre << " no tiene ancestros.\n";
+    }
+}
+// Recorre el �rbol y muestra a todas las personas que nacieron despu�s que la persona indicada
+void buscarDescendientesPorFecha(Persona* nodo, const string& refFecha, int& contador) {
+    if (nodo == NULL) return;
+
+    buscarDescendientesPorFecha(nodo->hijoIzquierdo, refFecha, contador);
+
+    if (nodo->fechaNacimiento > refFecha) {
+        cout << "- " << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+        contador++;
+    }
+
+    buscarDescendientesPorFecha(nodo->hijoDerecho, refFecha, contador);
+}
+
+void mostrarDescendientes() {
+    if (raiz == NULL) {
+        cout << "El �rbol est� vac�o.\n";
+        return;
+    }
+
+    string nombre;
+    cout << "Ingrese el nombre de la persona: ";
+    getline(cin, nombre);
+
+    Persona* ref = buscarPorNombre(raiz, nombre);
+    if (ref == NULL) {
+        cout << "Persona no encontrada.\n";
+        return;
+    }
     cout << "\nDescendientes de " << ref->nombre << " (por fecha):\n";
-    int contador = 0;  // Inicializa el contador de personas encontradas
+    int contador = 0;
     buscarDescendientesPorFecha(raiz, ref->fechaNacimiento, contador);
 
-    // Si no se encontro ninguna persona con fecha posterior, se informa
     if (contador == 0) {
         cout << ref->nombre << " no tiene descendientes.\n";
     }
 }
 
-// Función que verifica si 'posibleAncestro' es ancestro de 'persona'
-bool esAncestro(Persona* posibleAncestro, Persona* persona) { 
-    Persona* actual = persona->padre;   // Comienza desde el padre de la persona actual
-    while (actual != NULL) {   // Recorre la línea de ascendencia mientras haya padres
-        if (actual == posibleAncestro)       // Si encuentra al posible ancestro, retorna true
-            return true;
-        actual = actual->padre;    // Avanza al siguiente ancestro (padre del padre)
-    }
-    return false;     // Si no lo encuentra en la cadena de padres, retorna false
-}
 
-// Compara la fecha de nacimiento de dos personas para decir si una nació antes o después que la otra
+// Compara la fecha de nacimiento de dos personas para decir si una naci� antes o despu�s que la otra
 void consultarRelacion() {
     string nombreA, nombreB;
     cout << "Ingrese el nombre de la primera persona: ";
@@ -279,16 +310,17 @@ void consultarRelacion() {
         return;
     }
     if (A->fechaNacimiento < B->fechaNacimiento) {
-        cout << A->nombre << " es ancestro temporal de " << B->nombre << " (nació antes).\n";
+        cout << A->nombre << " es ancestro temporal de " << B->nombre << " (naci� antes).\n";
     } else if (A->fechaNacimiento > B->fechaNacimiento) {
-        cout << A->nombre << " es descendiente temporal de " << B->nombre << " (nació después).\n";
+        cout << A->nombre << " es descendiente temporal de " << B->nombre << " (naci� despu�s).\n";
     } else {
-        cout << A->nombre << " y " << B->nombre << " nacieron el mismo día. No hay diferencia temporal.\n";
+        cout << A->nombre << " y " << B->nombre << " nacieron el mismo d�a. No hay diferencia temporal.\n";
     }
 }
+
 //------------------------Menus de control----------------------------------------------------
-// Submenú de recorridos
-int submenuRecorridos() {
+// Submena de recorridos
+void submenuRecorridos() {
     int opcion;
     do {
         cout << "\n--- SUBMENÚ DE RECORRIDOS ---\n";
@@ -308,35 +340,33 @@ int submenuRecorridos() {
             default: cout << "Opción inválida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
-    return opcion;
 }
-
 
 // Submenu de consultas genealogicas
 void submenuConsultas() {
     int opcion;
     do {
-        cout << "\n--- SUBMENÚ DE CONSULTAS POR FECHA DE NACIMIENTO ---\n";
+        cout << "\n--- SUBMEN� DE CONSULTAS POR FECHA DE NACIMIENTO ---\n";
         cout << "1. Ver ancestros \n";
         cout << "2. Ver descendientes \n";
-        cout << "3. Ver relación entre dos personas\n";
-        cout << "4. Volver al menú principal\n";
-        cout << "Seleccione una opción: ";
+        cout << "3. Ver relaci�n entre dos personas\n";
+        cout << "4. Volver al men� principal\n";
+        cout << "Seleccione una opci�n: ";
         cin >> opcion;
         cin.ignore();
 
         switch (opcion) {
             case 1: mostrarAncestros(); break;           // Consulta ancestros por fecha
             case 2: mostrarDescendientes(); break;       // Consulta descendientes por fecha
-            case 3: consultarRelacion(); break;          // Compara dos personas según su año
-            case 4: cout << "Volviendo al menú principal...\n"; break;
-            default: cout << "Opción inválida. Intente de nuevo.\n";
+            case 3: consultarRelacion(); break;          // Compara dos personas seg�n su a�o
+            case 4: cout << "Volviendo al men� principal...\n"; break;
+            default: cout << "Opci�n inv�lida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
 }
 
-// Submenú de eliminación
-int submenuEliminar() {
+// Submena de eliminación
+void submenuEliminar() {
     int opcion;
     do {
         cout << "\n--- SUBMENÚ DE ELIMINACIÓN ---\n";
@@ -353,10 +383,9 @@ int submenuEliminar() {
             default: cout << "Opción inválida. Intente de nuevo.\n";
         }
     } while (opcion != 3);
-    return opcion;
 }
 
-// Función para mostrar el árbol
+// Funci�n para mostrar el �rbol
 void mostrarArbol(Persona* nodo, int espacio = 0, int nivel = 0) {
     if (nodo == NULL) return;
     espacio += 10; // Aumentar el espacio para cada nivel
@@ -370,11 +399,10 @@ void mostrarArbol(Persona* nodo, int espacio = 0, int nivel = 0) {
 }
 //Main menu ,  
 int main() {
-	setlocale(LC_CTYPE, "Spanish");    
-  int opcion;
+	setlocale(LC_CTYPE, "Spanish");    int opcion;
     do {
         cout << "\n--- MENU ARBOL BINARIO GENEALOGICO ---\n";
-	cout << "1. Insertar persona\n";
+		cout << "1. Insertar persona\n";
         cout << "2. Buscar persona por nombre\n";
         cout << "3. Eliminar (persona o familia)\n";
         cout << "4. Recorridos (Preorden, Inorden, Postorden)\n";
@@ -385,7 +413,7 @@ int main() {
         cin >> opcion;
         cin.ignore();
         switch (opcion) {
-	    case 1: insertarPersona(); break;
+			case 1: insertarPersona(); break;
             case 2: buscarPersona(); break;
             case 3: submenuEliminar(); break;
             case 4: submenuRecorridos(); break;
@@ -394,6 +422,6 @@ int main() {
             case 7: cout << "Saliendo del programa.\n"; break;
             default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
-    } while (opcion != 8);
+    } while (opcion != 7);
     return 0; 
 }
