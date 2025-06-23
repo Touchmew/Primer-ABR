@@ -38,14 +38,14 @@ void insertarPersona() {
     getline(cin, fecha);
 
     if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') { // Se valida que la fecha tenga el formato correcto (YYYY-MM-DD)
-        cout << "Formato de fecha inv�lido. Use YYYY-MM-DD.\n";
+        cout << "Formato de fecha invalido. Use YYYY-MM-DD.\n";
         return; // Sale de la funcion si el formato no es valido
     }
     Persona* nueva = new Persona(nombre, fecha); // Se crea una nueva persona con los datos ingresados
     // Si el arbol esta vacio, se asigna la nueva persona como raiz
     if (raiz == NULL) {
         raiz = nueva;
-        cout << "Persona ra�z creada correctamente.\n";
+        cout << "Persona raiz creada correctamente.\n";
         return;
     }
     Persona* actual = raiz; // Se busca la posicion adecuada en el arbol
@@ -235,7 +235,7 @@ void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha, int& contado
 
 void mostrarAncestros() {
     if (raiz == NULL) {
-        cout << "El �rbol est� vac�o.\n";
+        cout << "El arbol esta vacio.\n";
         return;
     }
 
@@ -273,7 +273,7 @@ void buscarDescendientesPorFecha(Persona* nodo, const string& refFecha, int& con
 
 void mostrarDescendientes() {
     if (raiz == NULL) {
-        cout << "El �rbol est� vac�o.\n";
+        cout << "El arbol esta vacio.\n";
         return;
     }
 
@@ -346,12 +346,12 @@ void submenuRecorridos() {
 void submenuConsultas() {
     int opcion;
     do {
-        cout << "\n--- SUBMEN� DE CONSULTAS POR FECHA DE NACIMIENTO ---\n";
+        cout << "\n--- SUBMENU DE CONSULTAS POR FECHA DE NACIMIENTO ---\n";
         cout << "1. Ver ancestros \n";
         cout << "2. Ver descendientes \n";
-        cout << "3. Ver relaci�n entre dos personas\n";
-        cout << "4. Volver al men� principal\n";
-        cout << "Seleccione una opci�n: ";
+        cout << "3. Ver relacion entre dos personas\n";
+        cout << "4. Volver al menu principal\n";
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
 
@@ -359,8 +359,8 @@ void submenuConsultas() {
             case 1: mostrarAncestros(); break;           // Consulta ancestros por fecha
             case 2: mostrarDescendientes(); break;       // Consulta descendientes por fecha
             case 3: consultarRelacion(); break;          // Compara dos personas segun su año
-            case 4: cout << "Volviendo al men� principal...\n"; break;
-            default: cout << "Opci�n inv�lida. Intente de nuevo.\n";
+            case 4: cout << "Volviendo al menu principal...\n"; break;
+            default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
 }
