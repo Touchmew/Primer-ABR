@@ -214,19 +214,6 @@ void buscarPostorden(Persona* nodo) {
 }
 
 
-// Recorre el árbol y muestra a todas las personas que nacieron antes que la persona indicada
-void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha, int& contador) {
-    if (nodo == NULL) return;
-
-    buscarAncestrosPorFecha(nodo->hijoIzquierdo, refFecha, contador);
-
-    if (nodo->fechaNacimiento < refFecha) {
-        cout << "- " << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
-        contador++;
-    }
-
-    buscarAncestrosPorFecha(nodo->hijoDerecho, refFecha, contador);
-}
 
 // Función que muestra los ancestros de una persona en el árbol genealógico
 void mostrarAncestros() {
