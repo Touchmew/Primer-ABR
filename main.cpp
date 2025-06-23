@@ -30,76 +30,54 @@ Persona* buscarPorNombre(Persona* nodo, const string& nombre) {
 
     return buscarPorNombre(nodo->hijoDerecho, nombre);
 }
-//arbol de raiz
-void crearRaiz() {
-    if (raiz != NULL) {
-        cout << "Ya existe una raiz.\n";
-        return;
-    }
 
+// Insertar, 
+void insertarPersona() {
     string nombre, fecha;
-    cout << "Ingrese el nombre de la persona raiz: ";
+    cout << "Ingrese el nombre: ";
     getline(cin, nombre);
     cout << "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
     getline(cin, fecha);
 
-    raiz = crearPersona(nombre, fecha);
-    cout << "Raiz creada correctamente.\n";
-}
-// Insertar, Alvaro
-void anadirHijo() {
-  // Verifica si la raíz del árbol existe
+    if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') {
+        cout << "Formato de fecha inválido. Use YYYY-MM-DD.\n";
+        return;
+    }
+    Persona* nueva = new Persona(nombre, fecha);    // Insertar la persona automáticamente en el árbol como ABB
     if (raiz == NULL) {
-        cout << "Primero debes crear la persona raiz.\n";
-    } else {
-        string padreNombre;
-        cout << "Ingrese el nombre del padre/madre: ";
-        getline(cin, padreNombre);
-        // Busca al padre en el árbol
-        Persona* padre = buscarPorNombre(raiz, padreNombre);
-        if (padre == NULL) {
-            cout << "Padre/madre no encontrado.\n";
-        } else {
-            // Validar que la fecha de nacimiento del padre sea válida
-            if (padre->fechaNacimiento.length() < 10 || padre->fechaNacimiento[4] != '-' || padre->fechaNacimiento[7] != '-') {
-                cout << "La fecha de nacimiento del padre es invalida. Debe ser en formato YYYY-MM-DD.\n";
-            } else {
-                string hijoNombre, fecha;
-                cout << "Ingrese el nombre del hijo: ";
-                getline(cin, hijoNombre);
-                cout << "Ingrese la fecha de nacimiento (YYYY-MM-DD): ";
-                getline(cin, fecha);
+        raiz = nueva;
+        cout << "Persona raíz creada correctamente.\n";
+        return;
+    }
 
-                // Validación del formato de la fecha del hijo
-                if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') {
-                    cout << "Formato de fecha invalido. Use YYYY-MM-DD.\n";
-                } else {
-                    // Comparar los años de nacimiento directamente
-                    if (fecha < padre->fechaNacimiento) {
-                        if (padre->hijoIzquierdo == NULL) {
-                            padre->hijoIzquierdo = crearPersona(hijoNombre, fecha);
-                            padre->hijoIzquierdo->padre = padre;
-                            cout << "Hijo izquierdo agregado correctamente.\n";
-                        } else {
-                            cout << "Este padre ya tiene un hijo izquierdo.\n"; // Mensaje si ya se tiene uno a la izquierda
-                        }
-                    } else if (fecha > padre->fechaNacimiento) {
-                        if (padre->hijoDerecho == NULL) {
-                            padre->hijoDerecho = crearPersona(hijoNombre, fecha);
-                            padre->hijoDerecho->padre = padre;
-                            cout << "Hijo derecho agregado correctamente.\n";
-                        } else {
-                            cout << "Este padre ya tiene un hijo derecho.\n"; // Mensaje si ya se tiene uno a la derecha
-                        }
-                    } else {
-                        cout << "La fecha de nacimiento no puede ser la misma.\n";// Mensaje si las fechas son iguales
-                    }
-                }
-            }
+    Persona* actual = raiz;
+    Persona* padre = NULL;
+
+    while (actual != NULL) {
+        padre = actual;
+        if (fecha < actual->fechaNacimiento) {
+            actual = actual->hijoIzquierdo;
+        } else if (fecha > actual->fechaNacimiento) {
+            actual = actual->hijoDerecho;
+        } else {
+            cout << "Ya existe una persona con esa fecha de nacimiento.\n";
+            delete nueva;
+            return;
         }
     }
+    nueva->padre = padre;
+	
+    if (fecha < padre->fechaNacimiento) {
+        padre->hijoIzquierdo = nueva;
+    } else {
+        padre->hijoDerecho = nueva;
+    }
+    cout << "Persona insertada correctamente como "
+         << ((fecha < padre->fechaNacimiento) ? "hijo izquierdo" : "hijo derecho")
+         << " de " << padre->nombre << ".\n";
 }
-// Buscar , Almir 
+
+// Buscar   
 void buscarPersona() {
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
@@ -336,27 +314,29 @@ bool esAncestro(Persona* posibleAncestro, Persona* persona) {
     }
     return false;     // Si no lo encuentra en la cadena de padres, retorna false
 }
-// Compara dos personas para ver si una es ancestro de la otra
+
+// Compara la fecha de nacimiento de dos personas para decir si una nació antes o después que la otra
 void consultarRelacion() {
-    string nombreA, nombreB;    // Nombres de las personas a consultar
-    cout << "Ingrese el nombre de la primera persona: "; getline(cin, nombreA);   // Solicita y lee el primer nombre
-    cout << "Ingrese el nombre de la segunda persona: "; getline(cin, nombreB);   // Solicita y lee el segundo nombre
-
-    Persona* A = buscarPorNombre(raiz, nombreA);   // Busca la persona A en el árbol
-    Persona* B = buscarPorNombre(raiz, nombreB);   // Busca la persona B en el árbol
-
-    if (A == NULL || B == NULL) {                  // Si alguna de las personas no fue encontrada
-        cout << "Una o ambas personas no se encuentran.\n"; return;               // Muestra mensaje y termina
+    string nombreA, nombreB;
+    cout << "Ingrese el nombre de la primera persona: ";
+    getline(cin, nombreA);
+    cout << "Ingrese el nombre de la segunda persona: ";
+    getline(cin, nombreB);
+    Persona* A = buscarPorNombre(raiz, nombreA);
+    Persona* B = buscarPorNombre(raiz, nombreB);
+    if (A == NULL || B == NULL) {
+        cout << "Una o ambas personas no se encuentran.\n";
+        return;
     }
-
-    if (esAncestro(A, B)) {                        // Verifica si A es ancestro de B
-        cout << A->nombre << " es ancestro de " << B->nombre << ".\n";           // Muestra resultado
-    } else if (esAncestro(B, A)) {                 // Verifica si B es ancestro de A
-        cout << B->nombre << " es ancestro de " << A->nombre << ".\n";           // Muestra resultado
-    } else {                                       // Si no hay relación directa
-        cout << A->nombre << " y " << B->nombre << " no tienen relación directa.\n";  // Informa sin relación
+    if (A->fechaNacimiento < B->fechaNacimiento) {
+        cout << A->nombre << " es ancestro temporal de " << B->nombre << " (nació antes).\n";
+    } else if (A->fechaNacimiento > B->fechaNacimiento) {
+        cout << A->nombre << " es descendiente temporal de " << B->nombre << " (nació después).\n";
+    } else {
+        cout << A->nombre << " y " << B->nombre << " nacieron el mismo día. No hay diferencia temporal.\n";
     }
 }
+//------------------------Menus de control----------------------------------------------------
 // Submenú de recorridos
 int submenuRecorridos() {
     int opcion;
@@ -444,26 +424,24 @@ int main() {
   int opcion;
     do {
         cout << "\n--- MENU ARBOL BINARIO GENEALOGICO ---\n";
-        cout << "1. Crear persona raiz\n";
-        cout << "2. Anadir hijo (izquierdo o derecho)\n";
-        cout << "3. Buscar persona por nombre\n";
-        cout << "4. Eliminar (persona o familia)\n";
-        cout << "5. Recorridos (Preorden, Inorden, Postorden)\n";
-        cout << "6. Consultas (ancestros, descendientes, relaciones)\n";
-        cout << "7. Mostrar Arbol\n";
-        cout << "8. Salir\n";
+	cout << "1. Insertar persona\n";
+        cout << "2. Buscar persona por nombre\n";
+        cout << "3. Eliminar (persona o familia)\n";
+        cout << "4. Recorridos (Preorden, Inorden, Postorden)\n";
+        cout << "5. Consultas (ancestros, descendientes, relaciones)\n";
+        cout << "6. Mostrar Arbol\n";
+        cout << "7. Salir\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
         switch (opcion) {
-            case 1: crearRaiz(); break;
-            case 2: anadirHijo(); break;
-            case 3: buscarPersona(); break;
-            case 4: submenuEliminar(); break;
-            case 5: submenuRecorridos(); break;
-            case 6: submenuConsultas(); break;
-            case 7: mostrarArbol(raiz); break;
-            case 8: cout << "Saliendo del programa.\n"; break;
+	    case 1: insertarPersona(); break;
+            case 2: buscarPersona(); break;
+            case 3: submenuEliminar(); break;
+            case 4: submenuRecorridos(); break;
+            case 5: submenuConsultas(); break;
+            case 6: mostrarArbol(raiz); break;
+            case 7: cout << "Saliendo del programa.\n"; break;
             default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
     } while (opcion != 8);
