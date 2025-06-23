@@ -311,28 +311,28 @@ int submenuRecorridos() {
     return opcion;
 }
 
-// Submenú de consultas genealógicas
-int submenuConsultas() {
+
+// Submenu de consultas genealogicas
+void submenuConsultas() {
     int opcion;
     do {
-        cout << "\n--- SUBMENÚ DE CONSULTAS ---\n";
-        cout << "1. Ver ancestros\n";
-        cout << "2. Ver descendientes\n";
+        cout << "\n--- SUBMENÚ DE CONSULTAS POR FECHA DE NACIMIENTO ---\n";
+        cout << "1. Ver ancestros \n";
+        cout << "2. Ver descendientes \n";
         cout << "3. Ver relación entre dos personas\n";
-        cout << "4. Volver\n";
+        cout << "4. Volver al menú principal\n";
         cout << "Seleccione una opción: ";
         cin >> opcion;
         cin.ignore();
 
         switch (opcion) {
-            case 1: mostrarAncestros(); break;
-            case 2: mostrarDescendientes(); break;
-            case 3: consultarRelacion(); break;
+            case 1: mostrarAncestros(); break;           // Consulta ancestros por fecha
+            case 2: mostrarDescendientes(); break;       // Consulta descendientes por fecha
+            case 3: consultarRelacion(); break;          // Compara dos personas según su año
             case 4: cout << "Volviendo al menú principal...\n"; break;
             default: cout << "Opción inválida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
-    return opcion;
 }
 
 // Submenú de eliminación
