@@ -262,9 +262,9 @@ void mostrarAncestros() {
     }
 }
 
-// Función auxiliar recursiva que lista todos los descendientes de una persona
+
+// void listarDescendientes(Persona* persona, int& contador);
 void listarDescendientes(Persona* persona, int& contador) {
-    // Si el nodo está vacío, salimos
     if (persona == NULL) return;
 
     // Mostrar el nombre de la persona como descendiente
@@ -280,44 +280,37 @@ void listarDescendientes(Persona* persona, int& contador) {
     listarDescendientes(persona->hijoDerecho, contador);
 }
 
-
-// Función principal que permite al usuario ingresar un nombre
-// y ver todos los descendientes de esa persona
+// Modifica la llamada en mostrarDescendientes así:
 void mostrarDescendientes() {
-    // Verificamos si el árbol está vacío
     if (raiz == NULL) {
         cout << "El árbol está vacío.\n"; // Mensaje de árbol vacío
         return; // Salimos de la función
     }
 
-    // Solicitar el nombre de la persona al usuario
     string nombre;
     cout << "Ingrese el nombre de la persona para ver sus descendientes: ";
     getline(cin, nombre); // Lee el nombre ingresado
 
-    // Buscar la persona en el árbol
     Persona* persona = buscarPorNombre(raiz, nombre);
 
-    // Si no se encuentra, informar al usuario
     if (persona == NULL) {
         cout << "Persona no encontrada.\n"; // Mensaje si no se encuentra la persona
         return; // Salimos de la función
     }
 
-    // Inicializamos el contador de descendientes
-    int contador = 0;
+    int contador = 0; // Inicializamos el contador de descendientes
 
     // Iniciamos la búsqueda de descendientes desde los hijos de esta persona
-    listarDescendientes(persona->hijoIzquierdo, 1, contador);
-    listarDescendientes(persona->hijoDerecho, 1, contador);
+    listarDescendientes(persona->hijoIzquierdo, contador);
+    listarDescendientes(persona->hijoDerecho, contador);
 
-    // Mostrar resultado final
     if (contador == 0) {
         cout << persona->nombre << " no tiene descendientes.\n"; // Mensaje si no tiene descendientes
     } else {
         cout << persona->nombre << " tiene " << contador << " descendiente(s).\n"; // Mensaje con el número de descendientes
     }
 }
+
 
 // Función que verifica si 'posibleAncestro' es ancestro de 'persona'
 bool esAncestro(Persona* posibleAncestro, Persona* persona) { 
