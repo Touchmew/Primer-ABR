@@ -206,104 +206,54 @@ void buscarPostorden(Persona* nodo) {
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
 }
 
-// Función que muestra los ancestros
-void mostrarAncestros() {
+// Recorre el árbol y muestra a todas las personas que nacieron después que la persona indicada
+void buscarDescendientesPorFecha(Persona* nodo, const string& refFecha, int& contador) {
+    if (nodo == NULL) return;  // Caso base: si el nodo es nulo, no hay nada que procesar
+
+    // Recorrido en orden: primero el subárbol izquierdo
+    buscarDescendientesPorFecha(nodo->hijoIzquierdo, refFecha, contador);
+
+    // Si la fecha de nacimiento del nodo actual es posterior a la fecha de referencia, se muestra
+    if (nodo->fechaNacimiento > refFecha) {
+        cout << "- " << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
+        contador++;  // Se incrementa el contador de personas encontradas
+    }
+
+    // Luego se recorre el subárbol derecho
+    buscarDescendientesPorFecha(nodo->hijoDerecho, refFecha, contador);
+}
+
+// Función que solicita un nombre al usuario y muestra personas nacidas después que esa persona
+void mostrarDescendientes() {
     if (raiz == NULL) {
-        cout << "El arbol esta vacio.\n";
+        // Si el árbol está vacío, se informa y se termina la función
+        cout << "El árbol está vacío.\n";
         return;
     }
 
     string nombre;
     cout << "Ingrese el nombre de la persona: ";
-    getline(cin, nombre);
+    getline(cin, nombre);  // Se obtiene el nombre de la persona desde la entrada estándar
 
-    // Buscar la persona en el árbol
-    Persona* persona = buscarPorNombre(raiz, nombre);
-    if (persona == NULL) {
-        cout << "No se encontro a " << nombre << ".\n";
-        return;
-    }
-
-    // Mostrar ancestros desde la persona hacia la raíz
-    cout << "\nAncestros de " << persona->nombre << ":\n";
-    Persona* actual = persona->padre;
-    if (actual == NULL) {
-        cout << "No tiene ancestros (es la raiz).\n";
-        return;
-    }
-
-    while (actual != NULL) {
-        cout << actual->nombre << " (" << actual->fechaNacimiento << ")\n";
-        actual = actual->padre;
-    }
-}
-// Función auxiliar recursiva que lista todos los descendientes de una persona.
-// Parámetros:
-// - persona: el nodo actual que se está evaluando
-// - nivel: qué tan lejano es el descendiente (1 = hijo, 2 = nieto, etc.)
-// - contador: variable que acumula el número total de descendientes encontrados
-void listarDescendientes(Persona* persona, int nivel, int& contador) {
-    // Si el nodo está vacío, salimos
-    if (persona == NULL) return;
-
-    // Determinar el tipo de relación en función del nivel
-    string relacion;
-    switch (nivel) {
-        case 1: relacion = "Hijo/a"; break;
-        case 2: relacion = "Nieto/a"; break;
-        case 3: relacion = "Bisnieto/a"; break;
-        default:
-            // Para niveles mayores, se usa "-Nieto/a", "--Nieto/a", etc.
-            relacion = string(nivel - 2, '-') + "Nieto/a";
-            break;
-    }
-    // Mostrar el nombre de la persona y su relación
-    cout << "- " << persona->nombre << " (" << relacion << ")\n";
-    // Incrementar el contador de descendientes
-    contador++;
-    // Llamar recursivamente por el hijo izquierdo (si existe)
-    listarDescendientes(persona->hijoIzquierdo, nivel + 1, contador);
-
-    // Llamar recursivamente por el hijo derecho (si existe)
-    listarDescendientes(persona->hijoDerecho, nivel + 1, contador);
-}
-
-// Función principal que permite al usuario ingresar un nombre
-// y ver todos los descendientes de esa persona
-void mostrarDescendientes() {
-    // Verificamos si el árbol está vacío
-    if (raiz == NULL) {
-        cout << "El árbol está vacío.\n";
-        return;
-    }
-    // Solicitar el nombre de la persona al usuario
-    string nombre;
-    cout << "Ingrese el nombre de la persona para ver sus descendientes: ";
-    getline(cin, nombre);
-
-    // Buscar la persona en el árbol
-    Persona* persona = buscarPorNombre(raiz, nombre);
-
-    // Si no se encuentra, informar al usuario
-    if (persona == NULL) {
+    // Se busca la persona por nombre en el árbol
+    Persona* ref = buscarPorNombre(raiz, nombre);
+    if (ref == NULL) {
+        // Si la persona no fue encontrada, se informa y se termina la función
         cout << "Persona no encontrada.\n";
         return;
     }
 
-    // Inicializamos el contador de descendientes
-    int contador = 0;
+    // Si se encuentra la persona, se busca y muestran las personas nacidas después
+    cout << "\nDescendientes de " << ref->nombre << " (por fecha):\n";
+    int contador = 0;  // Inicializa el contador de personas encontradas
+    buscarDescendientesPorFecha(raiz, ref->fechaNacimiento, contador);
 
-    // Iniciamos la búsqueda de descendientes desde los hijos de esta persona
-    listarDescendientes(persona->hijoIzquierdo, 1, contador);
-    listarDescendientes(persona->hijoDerecho, 1, contador);
-
-    // Mostrar resultado final
+    // Si no se encontro ninguna persona con fecha posterior, se informa
     if (contador == 0) {
-        cout << persona->nombre << " no tiene descendientes.\n";
-    } else {
-        cout << persona->nombre << " tiene " << contador << " descendiente(s).\n";
+        cout << ref->nombre << " no tiene descendientes.\n";
     }
 }
+
 // Función que verifica si 'posibleAncestro' es ancestro de 'persona'
 bool esAncestro(Persona* posibleAncestro, Persona* persona) { 
     Persona* actual = persona->padre;   // Comienza desde el padre de la persona actual
