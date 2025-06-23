@@ -383,7 +383,7 @@ int submenuConsultas() {
         cout << "\n--- SUBMENU DE CONSULTAS ---\n";
         cout << "1. Ver ancestros\n";
         cout << "2. Ver descendientes\n";
-        cout << "3. Ver relaciÃ³n entre dos personas\n";
+        cout << "3. Ver relacion entre dos personas\n";
         cout << "4. Volver\n";
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -393,8 +393,8 @@ int submenuConsultas() {
             case 1: mostrarAncestros(); break;
             case 2: mostrarDescendientes(); break;
             case 3: consultarRelacion(); break;
-            case 4: cout << "Volviendo al menÃº principal...\n"; break;
-            default: cout << "OpciÃ³n invalida. Intente de nuevo.\n";
+            case 4: cout << "Volviendo al menu principal...\n"; break;
+            default: cout << "Opcion invalida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
     return opcion;
