@@ -39,16 +39,16 @@ void insertarPersona() {
 
     if (fecha.length() < 10 || fecha[4] != '-' || fecha[7] != '-') { // Se valida que la fecha tenga el formato correcto (YYYY-MM-DD)
         cout << "Formato de fecha inv�lido. Use YYYY-MM-DD.\n";
-        return; // Sale de la funci�n si el formato no es v�lido
+        return; // Sale de la funcion si el formato no es valido
     }
     Persona* nueva = new Persona(nombre, fecha); // Se crea una nueva persona con los datos ingresados
-    // Si el �rbol est� vac�o, se asigna la nueva persona como ra�z
+    // Si el arbol esta vacio, se asigna la nueva persona como raiz
     if (raiz == NULL) {
         raiz = nueva;
         cout << "Persona ra�z creada correctamente.\n";
         return;
     }
-    Persona* actual = raiz; // Se busca la posici�n adecuada en el �rbol
+    Persona* actual = raiz; // Se busca la posicion adecuada en el arbol
     Persona* padre = NULL;
 
     while (actual != NULL) {
@@ -72,7 +72,7 @@ void insertarPersona() {
         padre->hijoDerecho = nueva;
     }
 
-    cout << "Persona insertada correctamente como "    // Mensaje de confirmaci�n de inserci�n
+    cout << "Persona insertada correctamente como "    // Mensaje de confirmacion de insercion
          << ((fecha < padre->fechaNacimiento) ? "hijo izquierdo" : "hijo derecho")
          << " de " << padre->nombre << ".\n";
 }
@@ -206,7 +206,7 @@ void buscarPostorden(Persona* nodo) {
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
 }
 
-// Recorre el �rbol y muestra a todas las personas que nacieron antes que la persona indicada
+// Recorre el arbol y muestra a todas las personas que nacieron antes que la persona indicada
 void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha) {
     if (nodo == NULL) return;
 
@@ -219,7 +219,7 @@ void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha) {
     buscarAncestrosPorFecha(nodo->hijoDerecho, refFecha);
 }
 
-// Recorre el �rbol y muestra a todas las personas que nacieron antes que la persona indicada
+// Recorre el arbol y muestra a todas las personas que nacieron antes que la persona indicada
 void buscarAncestrosPorFecha(Persona* nodo, const string& refFecha, int& contador) {
     if (nodo == NULL) return;
 
@@ -257,7 +257,7 @@ void mostrarAncestros() {
         cout << ref->nombre << " no tiene ancestros.\n";
     }
 }
-// Recorre el �rbol y muestra a todas las personas que nacieron despu�s que la persona indicada
+// Recorre el arbol y muestra a todas las personas que nacieron despues que la persona indicada
 void buscarDescendientesPorFecha(Persona* nodo, const string& refFecha, int& contador) {
     if (nodo == NULL) return;
 
@@ -296,7 +296,7 @@ void mostrarDescendientes() {
 }
 
 
-// Compara la fecha de nacimiento de dos personas para decir si una naci� antes o despu�s que la otra
+// Compara la fecha de nacimiento de dos personas para decir si una nacio antes o despues que la otra
 void consultarRelacion() {
     string nombreA, nombreB;
     cout << "Ingrese el nombre de la primera persona: ";
@@ -358,7 +358,7 @@ void submenuConsultas() {
         switch (opcion) {
             case 1: mostrarAncestros(); break;           // Consulta ancestros por fecha
             case 2: mostrarDescendientes(); break;       // Consulta descendientes por fecha
-            case 3: consultarRelacion(); break;          // Compara dos personas seg�n su a�o
+            case 3: consultarRelacion(); break;          // Compara dos personas segun su año
             case 4: cout << "Volviendo al men� principal...\n"; break;
             default: cout << "Opci�n inv�lida. Intente de nuevo.\n";
         }
@@ -385,7 +385,7 @@ void submenuEliminar() {
     } while (opcion != 3);
 }
 
-// Funci�n para mostrar el �rbol
+// Funcion para mostrar el arbol
 void mostrarArbol(Persona* nodo, int espacio = 0, int nivel = 0) {
     if (nodo == NULL) return;
     espacio += 10; // Aumentar el espacio para cada nivel
