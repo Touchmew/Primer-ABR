@@ -380,12 +380,12 @@ void submenuRecorridos() {
 int submenuConsultas() {
     int opcion;
     do {
-        cout << "\n--- SUBMENÃš DE CONSULTAS ---\n";
+        cout << "\n--- SUBMENU DE CONSULTAS ---\n";
         cout << "1. Ver ancestros\n";
         cout << "2. Ver descendientes\n";
         cout << "3. Ver relaciÃ³n entre dos personas\n";
         cout << "4. Volver\n";
-        cout << "Seleccione una opciÃ³n: ";
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
 
@@ -394,7 +394,7 @@ int submenuConsultas() {
             case 2: mostrarDescendientes(); break;
             case 3: consultarRelacion(); break;
             case 4: cout << "Volviendo al menÃº principal...\n"; break;
-            default: cout << "OpciÃ³n invÃ¡lida. Intente de nuevo.\n";
+            default: cout << "OpciÃ³n invalida. Intente de nuevo.\n";
         }
     } while (opcion != 4);
     return opcion;
