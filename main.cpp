@@ -10,24 +10,28 @@ struct Persona{
   Persona* padre;
   Persona* hijoIzquierdo;
   Persona* hijoDerecho;
+  // Constructor que inicializa una persona con nombre y fecha de nacimiento,
+  // y establece sus punteros a NULL (sin conexiones inicialmente)
   Persona(string _nombre, string _fecha)
         : nombre(_nombre), fechaNacimiento(_fecha),
           padre(NULL), hijoIzquierdo(NULL), hijoDerecho(NULL) {}
 };
-//nodo global
+// Nodo raíz del árbol genealógico (inicio del árbol), declarado como global
 Persona* raiz = NULL;
-//Funcion crear persona
+// Función para crear una nueva persona y devolver su puntero
+// Recibe el nombre y la fecha de nacimiento como parámetros
 Persona* crearPersona(string nombre, string fecha) {
-    return new Persona(nombre, fecha);
+    return new Persona(nombre, fecha); // Crea una nueva instancia de Persona y la devuelve
 }
-//funcion para buscar recurrsiva
+// Función recursiva para buscar una persona por su nombre en el árbol
 Persona* buscarPorNombre(Persona* nodo, const string& nombre) {
-    if (nodo == NULL) return NULL;
-    if (nodo->nombre == nombre) return nodo;
+    if (nodo == NULL) return NULL; // Caso base: si el nodo es NULL, no se encontró
+    if (nodo->nombre == nombre) return nodo; // Si el nombre del nodo actual coincide, se retorna
 
+    // Busca recursivamente en el hijo izquierdo
     Persona* encontrado = buscarPorNombre(nodo->hijoIzquierdo, nombre);
-    if (encontrado != NULL) return encontrado;
-
+    if (encontrado != NULL) return encontrado;  // Si lo encontró, lo retorna
+    // Si no se encontró en el hijo izquierdo, busca en el hijo derecho
     return buscarPorNombre(nodo->hijoDerecho, nombre);
 }
 void insertarPersona() {
@@ -77,18 +81,20 @@ void insertarPersona() {
          << " de " << padre->nombre << ".\n";
 }
 
-// Buscar ,  
+// Función para buscar una persona por su nombre e imprimir sus datos si se encuentra 
 void buscarPersona() {
+    // Verifica si el árbol está vacío
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
         return;
     }
 
-    string nombre;
+    string nombre; // Variable para almacenar el nombre a buscar
     cout << "Nombre a buscar: ";
     getline(cin, nombre);
+    // Llama a la función recursiva para buscar la persona desde la raíz
     Persona* persona = buscarPorNombre(raiz, nombre);
-
+    // Si se encontró a la persona, muestra su nombre y fecha de nacimiento
     if (persona != NULL) {
         cout << "Persona encontrada: " << persona->nombre
              << ", Fecha de nacimiento: " << persona->fechaNacimiento << "\n";
@@ -97,7 +103,7 @@ void buscarPersona() {
     }
 }
 
-//Eliminar,   
+// Función para eliminar una persona del árbol genealógico
 void eliminarPersona() {
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
@@ -106,9 +112,9 @@ void eliminarPersona() {
 
     string nombre;
     cout << "Nombre de la persona a eliminar: ";
-    getline(cin, nombre);
-    Persona* persona = buscarPorNombre(raiz, nombre);
-
+    getline(cin, nombre); // Solicita el nombre de la persona a eliminar
+    Persona* persona = buscarPorNombre(raiz, nombre); // Busca la persona en el árbol
+    // Si no se encuentra la persona
     if (persona == NULL) {
         cout << "No se encontro a " << nombre << ".\n";
         return;
@@ -120,15 +126,15 @@ void eliminarPersona() {
         return;
     }
 
-    // Si es la raiz
+    // Si la persona a eliminar es la raíz del árbol
     if (persona == raiz) {
-        delete raiz;
-        raiz = NULL;
+        delete raiz; // Libera la memoria de la raíz
+        raiz = NULL; // Actualiza la raíz a NULL
         cout << "Raiz eliminada correctamente.\n";
         return;
     }
 
-    // Eliminar desde el padre
+    // Obtiene el puntero al padre de la persona
     Persona* padre = persona->padre;
     if (padre->hijoIzquierdo == persona) {
         padre->hijoIzquierdo = NULL;
@@ -147,30 +153,31 @@ void eliminarSubarbol(Persona* nodo) {
     eliminarSubarbol(nodo->hijoDerecho);
     delete nodo;
 }
-//Elimina a una persona y todos sus descendientes
+// Función para eliminar una persona y todos sus descendientes (subárbol familiar)
 void eliminarFamilia() {
     if (raiz == NULL) {
         cout << "El arbol esta vacio.\n";
-        return;
+        return; // Si no hay nodos, no hay nada que eliminar
     }
 
     string nombre;
     cout << "Nombre de la persona cuya familia desea eliminar: ";
-    getline(cin, nombre);
-    Persona* persona = buscarPorNombre(raiz, nombre);
+    getline(cin, nombre); // Solicita el nombre de la persona base para eliminar su familia
+    Persona* persona = buscarPorNombre(raiz, nombre); // Busca la persona
 
     if (persona == NULL) {
         cout << "No se encontro a " << nombre << ".\n";
-        return;
+        return; // Si no se encuentra, se informa y se cancela la operación
     }
 
+    // Si se quiere eliminar toda la familia desde la raíz
     if (persona == raiz) {
         eliminarSubarbol(raiz);
         raiz = NULL;
         cout << "Toda la familia (árbol completo) fue eliminada.\n";
         return;
     }
-
+    // Si no es la raíz, se desconecta del padre
     Persona* padre = persona->padre;
     if (padre->hijoIzquierdo == persona) {
         padre->hijoIzquierdo = NULL;
@@ -178,11 +185,11 @@ void eliminarFamilia() {
         padre->hijoDerecho = NULL;
     }
 
-    eliminarSubarbol(persona);
+    eliminarSubarbol(persona); // Elimina la persona y sus descendientes
     cout << "Familia descendiente de " << nombre << " eliminada correctamente.\n";
 }
 
-// Funcion de busqueda preorden
+// Recorre el árbol en preorden: nodo → izquierdo → derecho
 void buscarPreorden(Persona* nodo) {
     if (nodo == NULL) return;
     cout << nodo->nombre << " (" << nodo->fechaNacimiento << ")\n";
@@ -190,7 +197,7 @@ void buscarPreorden(Persona* nodo) {
     buscarPreorden(nodo->hijoDerecho);
 }
 
-// Función de búsqueda en inorden
+// Recorre el árbol en inorden: izquierdo → nodo → derecho
 void buscarInorden(Persona* nodo) {
     if (nodo == NULL) return;
     buscarInorden(nodo->hijoIzquierdo);
@@ -198,7 +205,7 @@ void buscarInorden(Persona* nodo) {
     buscarInorden(nodo->hijoDerecho);
 }
 
-// Función de búsqueda en postorden
+// Recorre el árbol en postorden: izquierdo → derecho → nodo
 void buscarPostorden(Persona* nodo) {
     if (nodo == NULL) return;
     buscarPostorden(nodo->hijoIzquierdo);
@@ -376,6 +383,7 @@ void submenuEliminar() {
         cout << "Seleccione una opción: ";
         cin >> opcion;
         cin.ignore();
+        // Se ejecuta la acción correspondiente a la opción elegida
         switch (opcion) {
             case 1: eliminarPersona(); break;
             case 2: eliminarFamilia(); break;
